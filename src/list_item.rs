@@ -10,19 +10,8 @@ impl Display for ListItem {
         write!(
             f,
             "{} {}",
-            match self.path.extension() {
-                Some(value) => get_icon_from_extension(value.to_str().unwrap()),
-                None =>
-                    if self.path.is_file() {
-                        get_icon_char(Icon::File)
-                    } else {
-                        get_icon_char(Icon::Folder)
-                    },
-            },
-            match self.path.file_name() {
-                Some(name) => name.to_str().unwrap(),
-                None => self.path.to_str().unwrap(),
-            }
+            get_icon(&self.path),
+            get_displayed_text(&self.path)
         )
     }
 }
@@ -31,6 +20,26 @@ impl ListItem {
     pub fn new(path: &PathBuf) -> ListItem {
         ListItem {
             path: path.to_path_buf(),
+        }
+    }
+}
+
+fn get_displayed_text(path: &PathBuf) -> &str {
+    match path.file_name() {
+        Some(name) => name.to_str().unwrap(),
+        None => path.to_str().unwrap(),
+    }
+}
+
+fn get_icon(path: &PathBuf) -> char {
+    match path.extension() {
+        Some(value) => get_icon_from_extension(value.to_str().unwrap()),
+        None => {
+            if path.is_file() {
+                get_icon_char(Icon::File)
+            } else {
+                get_icon_char(Icon::Folder)
+            }
         }
     }
 }
