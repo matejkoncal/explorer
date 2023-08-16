@@ -2,6 +2,8 @@
 
 Explorer is a file system explorer tool written in Rust. It allows users to navigate and interact with their file system through a command-line interface.
 
+![screenshot](https://github.com/matejkoncal/explorer/blob/master/images/screenshot.png)
+
 ## Installation
 
 To compile and use Explorer, you need to have the Rust toolchain installed. This includes Rust and Cargo. If you don't have them installed, you can follow the official Rust installation guide: [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)
