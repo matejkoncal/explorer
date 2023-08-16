@@ -2,27 +2,27 @@ use crate::icons::{get_icon_char, Icon};
 use std::{fmt::Display, path::PathBuf};
 
 pub struct ListItem {
-    path: PathBuf,
+    pub path: PathBuf,
 }
 
 impl Display for ListItem {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let extension = match self.path.extension() {
-            Some(value) => value.to_str().unwrap(),
-            None => {
-                if self.path.is_file() {
-                    "file"
-                } else {
-                    "folder"
-                }
-            }
-        };
-
         write!(
             f,
             "{} {}",
-            get_icon_from_extension(extension),
-            self.path.file_name().unwrap().to_str().unwrap()
+            match self.path.extension() {
+                Some(value) => get_icon_from_extension(value.to_str().unwrap()),
+                None =>
+                    if self.path.is_file() {
+                        get_icon_char(Icon::File)
+                    } else {
+                        get_icon_char(Icon::Folder)
+                    },
+            },
+            match self.path.file_name() {
+                Some(name) => name.to_str().unwrap(),
+                None => self.path.to_str().unwrap(),
+            }
         )
     }
 }
@@ -44,8 +44,6 @@ fn get_icon_from_extension(extension: &str) -> char {
         "html" => get_icon_char(Icon::HTML),
         "zip" => get_icon_char(Icon::Zip),
         "rs" => get_icon_char(Icon::Rust),
-        "file" => get_icon_char(Icon::File),
-        "folder" => get_icon_char(Icon::Folder),
         _ => get_icon_char(Icon::File),
     }
 }
